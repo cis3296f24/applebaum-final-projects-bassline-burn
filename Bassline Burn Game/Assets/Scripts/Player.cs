@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -30,6 +32,9 @@ public class Player : MonoBehaviour
     public float currentBoostTime = 0;
     public float drift;
     private Rigidbody2D rb;
+    public Text LapsText;
+    public Text FinishedText;
+    public int lapsCompleted = 0;
 
     void Start()
     {
@@ -134,6 +139,21 @@ public class Player : MonoBehaviour
             }
         }
         // attempt at boost
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.name.ToLower().Contains("checkpoint"))
+        {
+            lapsCompleted++;
+            Debug.Log("Hit " + col.gameObject.name);
+        }
+        else if (col.gameObject.name == "Finish")
+        {
+            FinishedText.text = "You Are Winnar!";
+            Debug.Log("Hit " + col.gameObject.name);
+        }
+        LapsText.text = "Laps: " + lapsCompleted + " / 2";
     }
 
     public void ChangeStats(int currentStation){
