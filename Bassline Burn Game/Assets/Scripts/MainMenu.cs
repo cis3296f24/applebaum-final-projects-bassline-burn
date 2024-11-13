@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayOnline()
     {
-         SceneManager.LoadScene("OnlineMultiplayerScene");
+         SceneManager.LoadScene("Lobby");
     }
 
     public void OpenOptions()
