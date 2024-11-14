@@ -1,17 +1,15 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using UnityEngine;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-    public void ConnectToPhoton()
-    {
-        PhotonNetwork.ConnectUsingSettings(); // Connect to Photon cloud
-    }
-
+    public event Action OnJoinSuccess;
+    public event Action OnPlayerJoin;
     public void CreateRoom(string roomCode)
     {
-        RoomOptions options = new RoomOptions { MaxPlayers = 10 };
+        RoomOptions options = new RoomOptions { MaxPlayers = 20 };
         PhotonNetwork.CreateRoom(roomCode, options);
     }
 
@@ -20,30 +18,28 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(roomCode);
     }
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("Connected to Photon server.");
-    }
-
     public override void OnJoinedRoom()
     {
+        OnJoinSuccess?.Invoke();
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         // Display player names in the room
-        //UpdatePlayerList();
+        OnPlayerJoin?.Invoke();
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.LogError("Failed to join room: " + message);
+
+        if (returnCode == ErrorCode.GameDoesNotExist)
+        {
+            Debug.Log("The room does not exist. Maybe it's closed or the name is incorrect.");
+        }
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         Debug.Log("Player joined: " + newPlayer.NickName);
-        UpdatePlayerList();
+        OnPlayerJoin?.Invoke();
     }
 
-    private void UpdatePlayerList()
-    {
-        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
-        {
-            Debug.Log("Player in room: " + player.NickName);
-            // Update your UI here to show player names in the lobby
-        }
-    }
 }
