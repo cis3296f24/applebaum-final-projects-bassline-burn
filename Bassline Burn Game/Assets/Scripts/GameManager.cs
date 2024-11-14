@@ -30,9 +30,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsConnected)
         {
-            photonView.RPC("StartCountdown", RpcTarget.AllBuffered);
+            // Only the host/master client starts the countdown in multiplayer mode
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("StartCountdown", RpcTarget.AllBuffered);
+            }
+        }
+        else
+        {
+            // Start countdown directly for offline mode
+            StartCoroutine(StartCountdown());
         }
     }
 
@@ -47,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    IEnumerator StartCountdown()
+    private IEnumerator StartCountdown()
     {
         while (countdownTime > 0)
         {
@@ -60,7 +69,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(1f);
         countdownText.gameObject.SetActive(false);
 
-        photonView.RPC("StartRace", RpcTarget.AllBuffered);  // Sync race start
+        StartRace(); // Start the race locally or through RPC
     }
 
     [PunRPC]
@@ -80,16 +89,26 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ResetGame()
     {
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
-            // Reset countdown and timer, then sync countdown to all players
             countdownTime = 3;
             countdownText.gameObject.SetActive(true);
             elapsedTime = 0f;
             raceOngoing = false;
             timerText.text = "00:00";
 
-            photonView.RPC("StartCountdown", RpcTarget.AllBuffered);  // Sync countdown reset
+            photonView.RPC("StartCountdown", RpcTarget.AllBuffered);  // Sync countdown reset in multiplayer mode
+        }
+        else if (!PhotonNetwork.IsConnected)
+        {
+            // Reset for offline mode
+            countdownTime = 3;
+            countdownText.gameObject.SetActive(true);
+            elapsedTime = 0f;
+            raceOngoing = false;
+            timerText.text = "00:00";
+
+            StartCoroutine(StartCountdown());
         }
     }
 

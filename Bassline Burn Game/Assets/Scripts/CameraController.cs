@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     public float maxOffset = 5;
 
     Vector3 currentOffset;
-
+ 
     void LateUpdate()
     {
         Vector3 targetPosition = target.transform.position;
