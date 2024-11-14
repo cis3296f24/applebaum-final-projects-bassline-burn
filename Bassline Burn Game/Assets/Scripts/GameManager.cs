@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Only the host/master client starts the countdown
             photonView.RPC("StartCountdown", RpcTarget.AllBuffered);
         }
     }
