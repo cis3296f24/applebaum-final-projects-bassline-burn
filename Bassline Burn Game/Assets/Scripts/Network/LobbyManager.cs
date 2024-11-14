@@ -7,6 +7,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 {
     public event Action OnJoinSuccess;
     public event Action OnPlayerJoin;
+
+    private void Start()
+    {
+        // Ensure all players are synced to the same scene
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
     public void CreateRoom(string roomCode)
     {
         RoomOptions options = new RoomOptions { MaxPlayers = 20 };
@@ -22,7 +29,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         OnJoinSuccess?.Invoke();
         Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
-        // Display player names in the room
+
+        // Optionally, start loading the game scene after joining
+        StartGame();
+
         OnPlayerJoin?.Invoke();
     }
 
@@ -42,4 +52,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         OnPlayerJoin?.Invoke();
     }
 
+    private void StartGame()
+    {
+        // Load the shared game scene for all players
+        PhotonNetwork.LoadLevel("GameScene");
+    }
 }
