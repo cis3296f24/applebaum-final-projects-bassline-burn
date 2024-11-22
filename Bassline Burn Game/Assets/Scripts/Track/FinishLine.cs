@@ -1,11 +1,16 @@
+
 using UnityEngine;
 
-public class FinishLine : MonoBehaviour {
-    public bool debug;
+public class FinishLine : MonoBehaviour
+{
+    public bool debug = false; // If true, bypass normal checks for testing purposes.
 
-    private void OnTriggerStay2D(Collider2D other) {
-        if ( other.TryGetComponent(out KartLapController kart) ) {
-            kart.ProcessFinishLine(this);
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log($"Player {other.name} reached the finish line!");
+            // Add race completion logic here
         }
     }
 }
