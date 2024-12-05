@@ -211,19 +211,16 @@ public class KartController : KartComponent
 			if (moveInput != 0)
 			{
 				rb.drag = Mathf.Lerp(rb.drag,0,Time.fixedDeltaTime*10);
-
-			// switch(GetSurface()){
-            // case Surface.SurfaceTypes.Offroad: 
-            //     rb.drag = Mathf.Lerp(rb.drag,9.0f,Time.fixedDeltaTime*3);
-            //     break;
-            // case Surface.SurfaceTypes.Hazard:
-            //     rb.drag = 0;
-            //     moveInput = Mathf.Clamp(moveInput, 0, 1.0f);
-            //     break;
-       		//  }
-
-				Vector2 engineForce = transform.up * moveInput * acceleration;
-				rb.AddForce(engineForce, ForceMode2D.Force);
+				// switch(GetSurface()){
+				// 	case Surface.SurfaceTypes.Offroad: 
+				// 		rb.drag = Mathf.Lerp(rb.drag,9.0f,Time.fixedDeltaTime*3);
+				// 		break;
+				// 	case Surface.SurfaceTypes.Hazard:
+				// 		rb.drag = 0;
+				// 		moveInput = Mathf.Clamp(moveInput, 0, 1.0f);
+				// 		break;
+       		 	// }
+			
 			}
 			else
 			{
@@ -233,6 +230,11 @@ public class KartController : KartComponent
 				rb.drag = Mathf.Lerp(rb.drag,3.0f,Time.fixedDeltaTime*3);
 			}
 
+			
+
+			
+				Vector2 engineForce = transform.up * moveInput * acceleration;
+				rb.AddForce(engineForce, ForceMode2D.Force);
 			Position = rb.position;
 		}
 	}
