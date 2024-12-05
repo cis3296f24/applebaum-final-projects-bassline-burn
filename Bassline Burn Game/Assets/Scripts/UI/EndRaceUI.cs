@@ -4,7 +4,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EndRaceUI : MonoBehaviour, GameUI.IGameUIComponent, IDisabledUI
+public class EndRaceUI : MonoBehaviour, IDisabledUI
 {
   public PlayerResultItem resultItemPrefab;
 	public Button continueEndButton;
@@ -19,7 +19,13 @@ public class EndRaceUI : MonoBehaviour, GameUI.IGameUIComponent, IDisabledUI
 		continueEndButton.onClick.AddListener(() => LevelManager.LoadMenu());
 	}
 
-	public void Setup()
+    public interface IGameUIComponent
+    {
+        void Init(KartEntity entity);
+    }
+
+
+    public void Setup()
 	{
 		KartLapController.OnRaceCompleted += RedrawResultsList;
 		KartEntity.OnKartSpawned += RedrawResultsList;
