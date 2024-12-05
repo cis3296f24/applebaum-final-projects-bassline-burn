@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fusion;
+using Fusion.Addons.Physics;
 using UnityEngine;
 
 public class CameraNode : MonoBehaviour
