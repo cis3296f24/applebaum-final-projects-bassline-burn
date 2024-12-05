@@ -344,6 +344,9 @@ public class KartController : KartComponent
 			}
 		}
 	}
+	public float GetVelocityMagnitude(){
+        return rb.velocity.magnitude;
+    }
 
 	float GetLateralVelocity(){
         return UnityEngine.Vector2.Dot(transform.right, rb.velocity);
