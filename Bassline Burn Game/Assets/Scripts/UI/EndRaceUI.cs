@@ -4,7 +4,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EndRaceUI : MonoBehaviour, IDisabledUI
+public class EndRaceUI : MonoBehaviour, GameUI.IGameUIComponent, IDisabledUI
 {
   public PlayerResultItem resultItemPrefab;
 	public Button continueEndButton;
