@@ -57,6 +57,7 @@ public class KartController : KartComponent
 	public GameObject[] radioUI;
 	[Networked] private Vector2 Position { get; set; }
 	[Networked] private float Rotation { get; set; }
+	public bool CanDrive = false;
 
 	private HashSet<int> checkpointsPassed = new HashSet<int>();
 	private int totalCheckpoints = 6;
@@ -190,7 +191,7 @@ public class KartController : KartComponent
     public override void OnRaceStart()
     {
         base.OnRaceStart();
-		
+		CanDrive = true;
 		
         if (Object.HasInputAuthority)
         {
@@ -199,30 +200,33 @@ public class KartController : KartComponent
     }
 
     private void Move(KartInput.NetworkInputData input)
-{
-    if (finished)
-    {
-        rb.velocity = Vector2.zero;
-        return; // Do nothing if the race is finished
-    }
+	{
+		moveInput = input.Accelerate;
 
-    moveInput = input.Accelerate;
+		float velocityVsUp = Vector2.Dot(transform.up, rb.velocity);
 
-    float velocityVsUp = Vector2.Dot(transform.up, rb.velocity);
+		if (Object.HasStateAuthority)
+		{
+			if (velocityVsUp > maxSpeedNormal && moveInput > 0)
+				moveInput = 0;
+			if (velocityVsUp < -maxSpeedNormal * 0.5f && moveInput < 0)
+				moveInput = 0;
+
 
 			
-		if (moveInput != 0){
+			if (moveInput != 0)
+			{
 				rb.drag = Mathf.Lerp(rb.drag,0,Time.fixedDeltaTime*10);
 				switch(GetSurface()){
-					  case Surface.SurfaceTypes.Offroad: 
+					case Surface.SurfaceTypes.Offroad: 
 						rb.drag = Mathf.Lerp(rb.drag,9.0f,Time.fixedDeltaTime*3);
 						break;
 					case Surface.SurfaceTypes.Hazard:
-						  rb.drag = 0;
-						  moveInput = Mathf.Clamp(moveInput, 0, 1.0f);
-						  break;
+						rb.drag = 0;
+						moveInput = Mathf.Clamp(moveInput, 0, 1.0f);
+						break;
        		 	}
-		
+			
 			}
 			else
 			{
@@ -255,21 +259,22 @@ public class KartController : KartComponent
 	}
 
 	private void Steer(KartInput.NetworkInputData input)
-{
-    if (finished)
-    {
-        return; // Prevent steering if the race is finished
-    }
+	{
+		turnInput = input.Steer;
 
+		if (finished){
+			return;
+		}
 
-		if (Object.HasStateAuthority){
+		if (Object.HasStateAuthority)
+		{
 			// float steerAmount = turnInput * maxSteerStrength;
 			// rotationAngle -= steerAmount * speedToDrift;
 			// rb.MoveRotation(rotationAngle);
 			float minSpeedForTurn = rb.velocity.magnitude/8;
-      minSpeedForTurn = Mathf.Clamp01(minSpeedForTurn);
-      rotationAngle -= turnInput * turnFactor * minSpeedForTurn;
-      rb.MoveRotation(rotationAngle);
+        	minSpeedForTurn = Mathf.Clamp01(minSpeedForTurn);
+        	rotationAngle -= turnInput * turnFactor * minSpeedForTurn;
+        	rb.MoveRotation(rotationAngle);
 			Rotation = rb.rotation; // Sync rotation
 		}
 	}
@@ -332,8 +337,7 @@ public class KartController : KartComponent
 
 
 
-	public void SetTotalCheckpoints(int count)
-	{
+	public void SetTotalCheckpoints(int count){
 		totalCheckpoints = count;
 	}
 
@@ -387,8 +391,7 @@ public class KartController : KartComponent
         return false;
     }
 
-	public void ResetCheckpoints()
-	{
+	public void ResetCheckpoints(){
 		checkpointsPassed.Clear();
 		highestCheckpointPassed = 0;
 		Debug.Log($"Checkpoints reset for lap {lapCount + 1}.");
@@ -398,8 +401,7 @@ public class KartController : KartComponent
         return carSurfaceHandler.GetCurrentSurface();
     }
 
-	private void StopCar()
-{
+	private void StopCar(){
     // Stop the Rigidbody2D
     rb.velocity = Vector2.zero;
     rb.angularVelocity = 0;
@@ -409,7 +411,40 @@ public class KartController : KartComponent
     turnInput = 0;
 
     Debug.Log("Race finished. Car stopped.");
-}
+	}
+
+	public IEnumerator RespawnWithDelay(float waitTime)
+	{
+		Debug.Log("Respawning in 1 second...");
+
+		// Optional: Disable car controls and play a respawn animation or effect
+		CanDrive = false;
+		rb.velocity = Vector2.zero;
+
+		yield return new WaitForSeconds(waitTime); // Wait for 1 second
+
+		if (highestCheckpointPassed >= 0 && highestCheckpointPassed < Track.Current.checkpoints.Length)
+		{
+			Transform respawnPoint = Track.Current.checkpoints[highestCheckpointPassed].transform;
+
+			// Reset position and velocity
+			rb.position = respawnPoint.position;
+			Rotation = rb.rotation = respawnPoint.eulerAngles.z; 
+			rb.velocity = Vector2.zero;
+			rb.angularVelocity = 0;
+
+	
+
+			Debug.Log($"Respawned at checkpoint {highestCheckpointPassed}");
+		}
+		else
+		{
+			Debug.LogWarning("No valid checkpoint to respawn at.");
+		}
+
+		// Re-enable controls after respawning
+		CanDrive = true;
+	}
 
 
 }
