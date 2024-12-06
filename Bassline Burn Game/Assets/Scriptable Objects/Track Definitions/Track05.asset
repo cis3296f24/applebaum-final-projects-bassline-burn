@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3edd0af2d2a408e4f99d6a997e6275d6, type: 3}
   m_Name: Track05
   m_EditorClassIdentifier: 
-  trackName: (WIP)
-  trackIcon: {fileID: 21300000, guid: 764ad189d8ef64544ba819f6ebde9b91, type: 3}
-  buildIndex: 4
+  trackName: Nocturnal Niche
+  trackIcon: {fileID: 21300000, guid: 7c67d6cbd74099347a9dd8afcc0c4fc1, type: 3}
+  buildIndex: 6
