@@ -1,6 +1,8 @@
 using System;
 using Fusion;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Collections;
 
@@ -13,7 +15,7 @@ public class KartController : KartComponent
 
 	public float maxSpeedNormal;
 	public float acceleration;
-	public float driftFactor;
+	//public float driftFactor;
 
 	[Tooltip("X-Axis: steering\nY-Axis: velocity\nCoordinate space is normalized")]
 
@@ -64,9 +66,21 @@ public class KartController : KartComponent
 	[Networked] public bool IsRaceFinished { get; private set; } = false;
 
 
+	public float velocityVsUp = 0;
+	public float someMaxSpeed = 0;
+	public float base_acceleration = 5f;
+	public float boostMultiplier;
+
+	public float base_boostAcceleration;
+	public float turnFactor = 3.5f;
+    public float driftFactor = 0.95f;
+
+	CarSurfaceHandler carSurfaceHandler;
+
 	private void Awake()
 	{
 		collider = GetComponent<CapsuleCollider2D>();
+		carSurfaceHandler = GetComponent<CarSurfaceHandler>();
 		
 	}
 
@@ -196,27 +210,36 @@ public class KartController : KartComponent
 
     float velocityVsUp = Vector2.Dot(transform.up, rb.velocity);
 
-    if (Object.HasStateAuthority)
-    {
-        if (velocityVsUp > maxSpeedNormal && moveInput > 0)
-            moveInput = 0;
-        if (velocityVsUp < -maxSpeedNormal * 0.5f && moveInput < 0)
-            moveInput = 0;
+			
+		if (moveInput != 0){
+				rb.drag = Mathf.Lerp(rb.drag,0,Time.fixedDeltaTime*10);
+				switch(GetSurface()){
+					  case Surface.SurfaceTypes.Offroad: 
+						rb.drag = Mathf.Lerp(rb.drag,9.0f,Time.fixedDeltaTime*3);
+						break;
+					case Surface.SurfaceTypes.Hazard:
+						  rb.drag = 0;
+						  moveInput = Mathf.Clamp(moveInput, 0, 1.0f);
+						  break;
+       		 	}
+		
+			}
+			else
+			{
+				// Apply drag when there's no input
+				//ApplyDrag();
+				//rb.drag = Mathf.Lerp(rb.drag,0,Time.fixedDeltaTime*10);
+				rb.drag = Mathf.Lerp(rb.drag,3.0f,Time.fixedDeltaTime*3);
+			}
 
-        if (moveInput != 0)
-        {
-            Vector2 engineForce = transform.up * moveInput * acceleration;
-            rb.AddForce(engineForce, ForceMode2D.Force);
-        }
-        else
-        {
-            // Apply drag when there's no input
-            ApplyDrag();
-        }
+			
 
-        Position = rb.position;
-    }
-}
+			
+				Vector2 engineForce = transform.up * moveInput * acceleration;
+				rb.AddForce(engineForce, ForceMode2D.Force);
+			Position = rb.position;
+		}
+	}
 
 
 	private void ApplyDrag()
@@ -238,17 +261,18 @@ public class KartController : KartComponent
         return; // Prevent steering if the race is finished
     }
 
-    turnInput = input.Steer;
 
-    if (Object.HasStateAuthority)
-    {
-        float steerAmount = turnInput * maxSteerStrength;
-        rotationAngle -= steerAmount * speedToDrift;
-        rb.MoveRotation(rotationAngle);
-
-        Rotation = rb.rotation; // Sync rotation
-    }
-}
+		if (Object.HasStateAuthority){
+			// float steerAmount = turnInput * maxSteerStrength;
+			// rotationAngle -= steerAmount * speedToDrift;
+			// rb.MoveRotation(rotationAngle);
+			float minSpeedForTurn = rb.velocity.magnitude/8;
+      minSpeedForTurn = Mathf.Clamp01(minSpeedForTurn);
+      rotationAngle -= turnInput * turnFactor * minSpeedForTurn;
+      rb.MoveRotation(rotationAngle);
+			Rotation = rb.rotation; // Sync rotation
+		}
+	}
 
 
 
@@ -332,6 +356,36 @@ public class KartController : KartComponent
 			}
 		}
 	}
+	public float GetVelocityMagnitude(){
+        return rb.velocity.magnitude;
+    }
+
+	float GetLateralVelocity(){
+        return UnityEngine.Vector2.Dot(transform.right, rb.velocity);
+    }
+	public bool IsTireSchreeching(out float lateralVelocity, out bool isBoosting, out bool isBraking){
+        lateralVelocity = GetLateralVelocity();
+        isBoosting = false;
+        isBraking = false;
+
+        if(moveInput < 0 && velocityVsUp >0){
+            isBraking = true;
+            return true;
+        }
+
+
+        // if (playerBoost.IsPressed() && currentBoostTime > 0){
+        //     isBoosting = true;
+        //     return true;
+        // }
+
+
+        if(Mathf.Abs(GetLateralVelocity())>4.0f){
+            return true;
+        }
+
+        return false;
+    }
 
 	public void ResetCheckpoints()
 	{
@@ -339,6 +393,10 @@ public class KartController : KartComponent
 		highestCheckpointPassed = 0;
 		Debug.Log($"Checkpoints reset for lap {lapCount + 1}.");
 	}
+	public Surface.SurfaceTypes GetSurface(){
+		//Debug.Log($"Driving On {carSurfaceHandler.GetCurrentSurface()}");
+        return carSurfaceHandler.GetCurrentSurface();
+    }
 
 	private void StopCar()
 {
@@ -355,3 +413,4 @@ public class KartController : KartComponent
 
 
 }
+

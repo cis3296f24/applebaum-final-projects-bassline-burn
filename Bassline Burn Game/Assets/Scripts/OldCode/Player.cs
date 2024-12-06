@@ -284,6 +284,10 @@ public class Player : MonoBehaviour
         return carSurfaceHandler.GetCurrentSurface();
     }
 
+    public float GetVelocityMagnitude(){
+        return rb.velocity.magnitude;
+    }
+
 
 
     public void Jump(float jumpHeightScale, float jumpPushScale){
