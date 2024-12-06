@@ -5995,7 +5995,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7331411273529149064}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 001cf79b11fb94402833630b97bc6c6f, type: 3}
   m_Name: 
@@ -6011,7 +6011,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7331411273529149064}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -11128,6 +11128,7 @@ MonoBehaviour:
   _RoomUser: {fileID: 0}
   _AppliedSpeed: 0
   radioControlPad: {fileID: 7777496020295197691}
+  finishScreen: {fileID: 0}
   rotationAngle: 0
   moveInput: 0
   turnInput: 0
@@ -11139,6 +11140,7 @@ MonoBehaviour:
   - {fileID: 463196048361625817}
   - {fileID: 8870594667613173329}
   CanDrive: 0
+  _IsRaceFinished: 0
   velocityVsUp: 0
   someMaxSpeed: 0
   base_acceleration: 5

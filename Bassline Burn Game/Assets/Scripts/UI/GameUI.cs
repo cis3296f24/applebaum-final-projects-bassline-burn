@@ -24,6 +24,10 @@ public class GameUI : MonoBehaviour
 	private KartController KartController => Kart.Controller;
 	private KartController localKartController;
 	private bool startGame = false;
+	public GameObject radioOne;
+	public GameObject radioTwo;
+	public GameObject radioThree;
+	public GameObject radioFour;
 	private void Awake() {
 		
 	}
@@ -122,6 +126,31 @@ public class GameUI : MonoBehaviour
 				lapText.text = localKartController.lapCount.ToString() + "/3";
 			}
         }
+
+	 	if(localKartController.currentStation == 0){
+			radioOne.SetActive(true);
+			radioTwo.SetActive(false);
+			radioThree.SetActive(false);
+			radioFour.SetActive(false);
+		}
+		if(localKartController.currentStation == 1){
+			radioOne.SetActive(false);
+			radioTwo.SetActive(true);
+			radioThree.SetActive(false);
+			radioFour.SetActive(false);
+		}
+		if(localKartController.currentStation == 2){
+			radioOne.SetActive(false);
+			radioTwo.SetActive(false);
+			radioThree.SetActive(true);
+			radioFour.SetActive(false);
+		}
+		if(localKartController.currentStation == 3){
+			radioOne.SetActive(false);
+			radioTwo.SetActive(false);
+			radioThree.SetActive(false);
+			radioFour.SetActive(true);
+		}
 
 
 		

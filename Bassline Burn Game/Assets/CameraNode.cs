@@ -26,23 +26,23 @@ public class CameraNode : MonoBehaviour
 
         targetPosition.z = transform.position.z;
 
-        //Camera 1 - input based look ahead
-        //Vector3 targetOffset = transform.up * target.Thrust
+        // //Camera 1 - input based look ahead
+        // //Vector3 targetOffset = transform.up * target.Thrust
 
-        //Camera 2 - Velocity based camera - comment out this line for other versions
-        // Vector3 targetOffset = target.velocity * distanceMultiplier;
+        // //Camera 2 - Velocity based camera - comment out this line for other versions
+        // // Vector3 targetOffset = target.velocity * distanceMultiplier;
 
-        //Camera 3 - Forward Velocity Only
-        float forwardSpeed = Vector3.Dot(target.velocity, target.transform.up);
-        Vector3 targetOffset = target.transform.up * forwardSpeed * distanceMultiplier;
+        // //Camera 3 - Forward Velocity Only
+        // float forwardSpeed = Vector3.Dot(target.velocity, target.transform.up);
+        // Vector3 targetOffset = target.transform.up * forwardSpeed * distanceMultiplier;
 
-        Debug.DrawRay(targetPosition, targetOffset);
+        // Debug.DrawRay(targetPosition, targetOffset);
 
-        targetOffset = Vector3.ClampMagnitude(targetOffset, maxOffset);
+        // targetOffset = Vector3.ClampMagnitude(targetOffset, maxOffset);
 
-        currentOffset = Vector3.Lerp(currentOffset, targetOffset, responsiveness * Time.deltaTime);
+        // currentOffset = Vector3.Lerp(currentOffset, targetOffset, responsiveness * Time.deltaTime);
 
-        targetPosition += currentOffset;
+        // targetPosition += currentOffset;
 
         transform.position = targetPosition;
     }

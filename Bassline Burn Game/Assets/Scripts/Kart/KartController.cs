@@ -48,7 +48,7 @@ public class KartController : KartComponent
 	public GameObject finishScreen;
 	private bool inRadioMenu;
 	public float rotationAngle = 0;
-	private int currentStation = 0;
+	public int currentStation = 0;
 
 	public float moveInput;
     public float turnInput;
@@ -98,47 +98,14 @@ public class KartController : KartComponent
 	}
 
 	private void Update(){
-		// if (Inputs.IsDownThisFrame(KartInput.NetworkInputData.ButtonRadio))
-		// {
-		// 	if (inRadioMenu)
-		// 	{
-		// 		currentStation = (currentStation + 1) % radioUI.Length;
-		// 		radio.NavigateStations(true);
-		// 		menuTimerCurr = menuTimerMax;
-		// 		startedTimer = true;
-		// 		MenuManager(currentStation);
-		// 	}
-		// 	else
-		// 	{
-		// 		menuTimerCurr = menuTimerMax;
-		// 		startedTimer = true;
-		// 		radioControlPad.SetActive(true);
-		// 		inRadioMenu = true;
-		// 	}
-		// }
-
-		// if (menuTimerCurr <= 0 && startedTimer)
-		// {
-		// 	radioControlPad.SetActive(false);
-		// 	inRadioMenu = false;
-		// 	startedTimer = false;
-		// }
-
-		// menuTimerCurr -= Time.deltaTime;
-	}
-
-
-	private void MenuManager(int currentStation){
-		// for(int i = 0; i < 4; i++){
-		// 	if(i == currentStation){
-		// 		radioUI[i].transform.localScale = new Vector3(0.5f,0.5f,0);
-		// 		radioUI[i].GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1f);
-		// 	}else{
-		// 		radioUI[i].transform.localScale = new Vector3(0.2f,0.2f,0);
-		// 		radioUI[i].GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
-		// 	}
+		if (Inputs.IsDownThisFrame(KartInput.NetworkInputData.ButtonRadio))
+		{
+			currentStation = (currentStation + 1) % radioUI.Length;
+			radio.NavigateStations(true);
 			
-		// }
+		}
+
+		
 	}
 
 	
