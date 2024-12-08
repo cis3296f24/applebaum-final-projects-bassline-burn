@@ -14,9 +14,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Track01.unity
     guid: b219ff106e893c34c8775a9adc7718ea
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Track02.unity
-    guid: 63f70b178e9211d47ad7b6c8c10fe304
+    guid: 4b5af1434c267ca438b230dc437b2fbf
+  - enabled: 1
+    path: Assets/Scenes/Track03.unity
+    guid: 41e43342c79797544a6a3b205aa37ad5
+  - enabled: 1
+    path: Assets/Scenes/Track04.unity
+    guid: 72d64449dbf7b9d4a9ca193fc64904ca
+  - enabled: 1
+    path: Assets/Scenes/Track05.unity
+    guid: 700bd8c289562674f884afb91e41aad3
   - enabled: 1
     path: Assets/Scenes/Local.unity
     guid: 1cafbbf7b09dd124c8dbba04e2301bbc
