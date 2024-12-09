@@ -327,7 +327,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8502403a95838e044aa52f5ce2bf829f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 1
 --- !u!4 &360926393 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4186867160315030819, guid: 3af5feca5f7a5624e87a0483018a823e, type: 3}
@@ -677,7 +676,6 @@ MonoBehaviour:
   - {fileID: 622639463}
   finishLine: {fileID: 1853810519}
   definition: {fileID: 11400000, guid: e2e7036d9d3378a40abacf71ec90b788, type: 2}
-  sequence: {fileID: 1018824295}
   music: track01
   introSpeed: 0.5
 --- !u!114 &1018824295
@@ -692,8 +690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8c447b3bcb90d48b3b41b5b30859b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 4
-  sequenceAudio: {fileID: 0}
 --- !u!114 &1018824296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3858155646
+  SortKey: 4245076366
   ObjectInterest: 1
   Flags: 264705
   NestedObjects: []

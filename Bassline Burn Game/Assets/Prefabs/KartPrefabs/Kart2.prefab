@@ -10512,15 +10512,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2716375098476227074}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 001cf79b11fb94402833630b97bc6c6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  distanceMultiplier: 3
-  responsiveness: 0
-  maxOffset: 5
 --- !u!20 &188975481392920988
 Camera:
   m_ObjectHideFlags: 0
@@ -10528,7 +10524,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2716375098476227074}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -11092,6 +11088,7 @@ GameObject:
   - component: {fileID: 6922710116129646473}
   - component: {fileID: 5160762401308021786}
   - component: {fileID: 6773694711587707924}
+  - component: {fileID: 6227417787206828198}
   - component: {fileID: 3403717950770787912}
   - component: {fileID: 5125356563137589369}
   - component: {fileID: 748752016149611564}
@@ -11103,6 +11100,7 @@ GameObject:
   - component: {fileID: 1550275147461168823}
   - component: {fileID: 3232264202677419555}
   - component: {fileID: 2075093900345213418}
+  - component: {fileID: 7028821684132274495}
   - component: {fileID: 6541776171429372613}
   m_Layer: 0
   m_Name: Kart2
@@ -11164,7 +11162,9 @@ MonoBehaviour:
   _RoomUser: {fileID: 0}
   _AppliedSpeed: 0
   radioControlPad: {fileID: 7777496020295197691}
+  finishScreen: {fileID: 0}
   rotationAngle: 0
+  currentStation: 0
   moveInput: 0
   turnInput: 0
   menuTimerMax: 3
@@ -11175,6 +11175,7 @@ MonoBehaviour:
   - {fileID: 463196048361625817}
   - {fileID: 8870594667613173329}
   CanDrive: 0
+  _IsRaceFinished: 0
   velocityVsUp: 0
   someMaxSpeed: 0
   base_acceleration: 5
@@ -11182,6 +11183,21 @@ MonoBehaviour:
   base_boostAcceleration: 0
   turnFactor: 3.5
   driftFactor: 0.95
+  currentBoostTime: 0
+  maxBoostTime: 3
+--- !u!114 &6227417787206828198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402647175462990998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28a3c24e0f6cb54ab1d9b5905ea0085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lapCounters: []
 --- !u!114 &3403717950770787912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11402,6 +11418,19 @@ MonoBehaviour:
   - {fileID: 2073124512964931355}
   currentStation: 0
   waitBeforeOff: 15
+--- !u!114 &7028821684132274495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402647175462990998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8af789e7b7ce3428c0655a90395a5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionText: {fileID: 0}
 --- !u!114 &6541776171429372613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11490,11 +11519,28 @@ MonoBehaviour:
     m_SingletonActionBindings:
     - m_Name: 
       m_Id: bd3fcb51-10d3-4ec7-9e7a-0cc9a8ddd511
-      m_Path: <Keyboard>/space
+      m_Path: <Keyboard>/q
       m_Interactions: 
       m_Processors: 
       m_Groups: 
       m_Action: Radio Menu
+      m_Flags: 0
+    m_Flags: 0
+  boost:
+    m_Name: Boost
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 232c26ef-90de-4671-b314-f2682dc83810
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a2df5c3d-a5c3-43fd-b16b-c53910adc53f
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Boost
       m_Flags: 0
     m_Flags: 0
 --- !u!1 &8870594667613173329

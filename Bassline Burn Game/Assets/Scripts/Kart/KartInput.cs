@@ -12,6 +12,7 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
         public const uint ButtonAccelerate = 1 << 0;
         public const uint ButtonReverse = 1 << 1;
         public const uint ButtonRadio = 1 << 4;
+        public const uint ButtonBoost = 1 << 0;
 
         public uint Buttons;
         public uint OneShots;
@@ -30,6 +31,13 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
             set => _accelerate = (int)(value * 1000);
         }
 
+        private int _boost;
+        public float Boost
+        {
+            get => _boost * .001f;
+            set => _boost = (int)(value * 1000);
+        }
+
         public bool IsUp(uint button) => IsDown(button) == false;
         public bool IsDown(uint button) => (Buttons & button) == button;
         public bool IsDownThisFrame(uint button) => (OneShots & button) == button;
@@ -40,12 +48,19 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
     [SerializeField] private InputAction accelerate;
     [SerializeField] private InputAction steer;
     [SerializeField] private InputAction radioMenu;
+    [SerializeField] private InputAction boost;
 
     public bool RadioMenuPressed { get; private set; }
 
     private void RadioMenuHandler(InputAction.CallbackContext ctx){
 		Debug.Log("Radio menu button pressed!");
 		RadioMenuPressed = true;
+	}
+    public bool BoostPressed { get; private set; }
+
+    private void BoostHandler(InputAction.CallbackContext ctx){
+		Debug.Log("Boost button pressed!");
+		BoostPressed = true;
 	}
 
     public override void Spawned()
@@ -57,12 +72,15 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
         accelerate = accelerate.Clone();
         steer = steer.Clone();
         radioMenu = radioMenu.Clone();
+        boost = boost.Clone();
 
         accelerate.Enable();
         steer.Enable();
         radioMenu.Enable();
+        boost.Enable();
 
         radioMenu.started += RadioMenuHandler;
+        boost.started += BoostHandler;
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
@@ -82,6 +100,7 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
         accelerate.Dispose();
         steer.Dispose();
         radioMenu.Dispose();
+        boost.Dispose();
     }
 
     private static bool ReadBool(InputAction action) => action.ReadValue<float>() != 0;
@@ -95,6 +114,7 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
         {
             Accelerate = ReadFloat(accelerate),
             Steer = ReadFloat(steer),
+            Boost = ReadFloat(boost),
         };
 
         // Handle Radio Menu Button Press
@@ -103,6 +123,8 @@ public class KartInput : KartComponent, INetworkRunnerCallbacks
             userInput.Buttons |= NetworkInputData.ButtonRadio;
             RadioMenuPressed = false; // Reset after reading
         }
+
+        
 
         input.Set(userInput);
     }
