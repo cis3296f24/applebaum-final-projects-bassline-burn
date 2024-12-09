@@ -690,8 +690,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8c447b3bcb90d48b3b41b5b30859b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 4
-  sequenceAudio: {fileID: 0}
 --- !u!114 &1018824296
 MonoBehaviour:
   m_ObjectHideFlags: 0

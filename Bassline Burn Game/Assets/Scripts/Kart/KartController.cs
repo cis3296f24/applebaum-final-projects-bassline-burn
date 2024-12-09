@@ -75,6 +75,11 @@ public class KartController : KartComponent
 	public float base_boostAcceleration;
 	public float turnFactor = 3.5f;
     public float driftFactor = 0.95f;
+	public float currentBoostTime = 0;
+	public float maxBoostTime = 3f;
+	public float boostVal = 15f;
+
+	public float baseSpeed = 10f;
 
 	CarSurfaceHandler carSurfaceHandler;
 
@@ -100,6 +105,7 @@ public class KartController : KartComponent
 	private void Update(){
 		if (Inputs.IsDownThisFrame(KartInput.NetworkInputData.ButtonRadio))
 		{
+			Debug.Log("test");
 			currentStation = (currentStation + 1) % radioUI.Length;
 			radio.NavigateStations(true);
 			
@@ -122,6 +128,43 @@ public class KartController : KartComponent
 		if (GetInput(out KartInput.NetworkInputData input))
 		{
 			Inputs = input;
+		}
+
+		if (Inputs.IsDown(KartInput.NetworkInputData.ButtonRadio))
+		{
+			//Debug.Log("test");
+			if(currentStation == 0){
+				currentStation = 1;
+			}
+			else{
+				currentStation = 0;
+			}
+			Debug.Log($"currentStation {currentStation}");
+			//currentStation = (currentStation + 1) % radioUI.Length;
+			radio.NavigateStations(true);
+			
+		}
+
+		if (Inputs.Boost != 0 && currentBoostTime > 0){
+			
+			boostMultiplier = 3f;
+            someMaxSpeed = boostVal;
+            currentBoostTime = Mathf.Clamp(currentBoostTime - Time.deltaTime * 2f, 0, maxBoostTime);
+			Debug.Log($"currentBoostTime {currentBoostTime}");
+			
+			
+		}
+		else{
+			boostMultiplier = 1f;
+			someMaxSpeed = baseSpeed;
+			if(currentBoostTime < maxBoostTime){
+				currentBoostTime += Time.deltaTime;
+			}
+			ChangeStats(radio.currentStation);
+
+			//Debug.Log($"boostMultiplier {boostMultiplier}");
+			
+			
 		}
 
 		if (GameManager.Instance.raceStart)
@@ -174,9 +217,9 @@ public class KartController : KartComponent
 
 		if (Object.HasStateAuthority)
 		{
-			if (velocityVsUp > maxSpeedNormal && moveInput > 0)
+			if (velocityVsUp > someMaxSpeed && moveInput > 0)
 				moveInput = 0;
-			if (velocityVsUp < -maxSpeedNormal * 0.5f && moveInput < 0)
+			if (velocityVsUp < -someMaxSpeed * 0.5f && moveInput < 0)
 				moveInput = 0;
 
 
@@ -206,9 +249,10 @@ public class KartController : KartComponent
 			
 
 			
-				Vector2 engineForce = transform.up * moveInput * acceleration;
-				rb.AddForce(engineForce, ForceMode2D.Force);
+			Vector2 engineForce = transform.up * moveInput * acceleration;
+			rb.AddForce(engineForce, ForceMode2D.Force);
 			Position = rb.position;
+
 		}
 	}
 
@@ -345,10 +389,10 @@ public class KartController : KartComponent
         }
 
 
-        // if (playerBoost.IsPressed() && currentBoostTime > 0){
-        //     isBoosting = true;
-        //     return true;
-        // }
+        if (Inputs.Boost != 0 && currentBoostTime > 0){
+            isBoosting = true;
+            return true;
+        }
 
 
         if(Mathf.Abs(GetLateralVelocity())>4.0f){
@@ -379,6 +423,23 @@ public class KartController : KartComponent
 
     Debug.Log("Race finished. Car stopped.");
 	}
+
+	public void ChangeStats(int currentStation){
+        if(currentStation == 0){
+			maxBoostTime = 3f;
+            base_acceleration = 6f;
+			boostVal = 15f;
+            baseSpeed = 10f;
+            driftFactor = 0.95f;
+            
+        }else if(currentStation == 1){
+			maxBoostTime = 9f;
+			boostVal = 20f;
+            base_acceleration = 5f;
+            baseSpeed = 6f;
+            driftFactor = 0.5f;
+        }
+    }
 
 	public IEnumerator RespawnWithDelay(float waitTime)
 	{
