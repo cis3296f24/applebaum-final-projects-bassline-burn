@@ -33,15 +33,12 @@ public class RadioStation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localPosition = initialLocalPosition;
-        transform.rotation = Quaternion.identity; 
         if(currentRadio == false && stopRadio == false){
             waitTime -= 1 * Time.deltaTime;
-            if(waitTime <= 0){
-                audioSource.Stop();
-                ShuffleRadio();
-                stopRadio = true;
-            }
+            audioSource.Stop();
+            ShuffleRadio();
+            stopRadio = true;
+            
         }
 
         if(stopRadio != true){

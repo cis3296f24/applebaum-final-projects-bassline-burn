@@ -26,6 +26,7 @@ public class Radio : MonoBehaviour
             if(i != currentStation){
                 radioStations[i].waitTime = waitBeforeOff;
                 radioStations[i].currentRadio = false;
+                radioStations[currentStation].stopRadio = false;
             }
         }
 

@@ -298,7 +298,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bae1e7d11127648349d0967e29f91478, type: 3}
   currentClip: {fileID: 0}
   currentClipNumber: 0
-  currentRadio: 1
+  currentRadio: 0
   stopRadio: 0
   waitTime: 0
   distanceFromParent: 2
@@ -594,12 +594,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   stationClips:
-  - {fileID: 8300000, guid: bae1e7d11127648349d0967e29f91478, type: 3}
-  - {fileID: 8300000, guid: bae1e7d11127648349d0967e29f91478, type: 3}
+  - {fileID: 8300000, guid: 858cf51103d2844eea37bd517782c3fc, type: 3}
+  - {fileID: 8300000, guid: 0a567a0c5c189418fa92bea28ca7f1c5, type: 3}
   currentClip: {fileID: 0}
   currentClipNumber: 0
-  currentRadio: 0
-  stopRadio: 0
+  currentRadio: 1
+  stopRadio: 1
   waitTime: 0
   distanceFromParent: 2
 --- !u!1 &2113113779964241493
@@ -11136,8 +11136,6 @@ MonoBehaviour:
   radioUI:
   - {fileID: 848845806773319010}
   - {fileID: 2112094434542501278}
-  - {fileID: 463196048361625817}
-  - {fileID: 8870594667613173329}
   CanDrive: 0
   _IsRaceFinished: 0
   velocityVsUp: 0
@@ -11149,6 +11147,8 @@ MonoBehaviour:
   driftFactor: 0.95
   currentBoostTime: 0
   maxBoostTime: 3
+  boostVal: 15
+  baseSpeed: 10
 --- !u!114 &3403717950770787912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11353,8 +11353,6 @@ MonoBehaviour:
   radioStations:
   - {fileID: 3839744537363518707}
   - {fileID: 2376588915281277175}
-  - {fileID: 2453660491670533038}
-  - {fileID: 2073124512964931355}
   currentStation: 0
   waitBeforeOff: 15
 --- !u!114 &6448133307651500650

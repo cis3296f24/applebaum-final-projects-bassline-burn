@@ -425,14 +425,14 @@ public class KartController : KartComponent
 	}
 
 	public void ChangeStats(int currentStation){
-        if(currentStation == 0){
+        if(currentStation == 1){
 			maxBoostTime = 3f;
             base_acceleration = 6f;
 			boostVal = 15f;
             baseSpeed = 10f;
             driftFactor = 0.95f;
             
-        }else if(currentStation == 1){
+        }else if(currentStation == 0){
 			maxBoostTime = 9f;
 			boostVal = 20f;
             base_acceleration = 5f;
