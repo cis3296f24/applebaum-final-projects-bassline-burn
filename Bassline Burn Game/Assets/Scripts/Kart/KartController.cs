@@ -77,6 +77,9 @@ public class KartController : KartComponent
     public float driftFactor = 0.95f;
 	public float currentBoostTime = 0;
 	public float maxBoostTime = 3f;
+	public float boostVal = 15f;
+
+	public float baseSpeed = 10f;
 
 	CarSurfaceHandler carSurfaceHandler;
 
@@ -127,31 +130,39 @@ public class KartController : KartComponent
 			Inputs = input;
 		}
 
-		if (Inputs.IsDownThisFrame(KartInput.NetworkInputData.ButtonRadio))
+		if (Inputs.IsDown(KartInput.NetworkInputData.ButtonRadio))
 		{
-			Debug.Log("test");
-			currentStation = (currentStation + 1) % radioUI.Length;
+			//Debug.Log("test");
+			if(currentStation == 0){
+				currentStation = 1;
+			}
+			else{
+				currentStation = 0;
+			}
+			Debug.Log($"currentStation {currentStation}");
+			//currentStation = (currentStation + 1) % radioUI.Length;
 			radio.NavigateStations(true);
 			
 		}
 
-		if (Inputs.Boost != 0){
+		if (Inputs.Boost != 0 && currentBoostTime > 0){
 			
 			boostMultiplier = 3f;
-            someMaxSpeed = 15f;
-            currentBoostTime = Mathf.Max(0, currentBoostTime - Time.deltaTime * 2f);
+            someMaxSpeed = boostVal;
+            currentBoostTime = Mathf.Clamp(currentBoostTime - Time.deltaTime * 2f, 0, maxBoostTime);
+			Debug.Log($"currentBoostTime {currentBoostTime}");
 			
 			
 		}
 		else{
 			boostMultiplier = 1f;
-			someMaxSpeed = 10f;
+			someMaxSpeed = baseSpeed;
 			if(currentBoostTime < maxBoostTime){
 				currentBoostTime += Time.deltaTime;
 			}
 			ChangeStats(radio.currentStation);
 
-			Debug.Log($"boostMultiplier {boostMultiplier}");
+			//Debug.Log($"boostMultiplier {boostMultiplier}");
 			
 			
 		}
@@ -415,14 +426,18 @@ public class KartController : KartComponent
 
 	public void ChangeStats(int currentStation){
         if(currentStation == 0){
+			maxBoostTime = 3f;
             base_acceleration = 6f;
-            someMaxSpeed = 10f;
-            driftFactor = 0.97f;
+			boostVal = 15f;
+            baseSpeed = 10f;
+            driftFactor = 0.95f;
             
         }else if(currentStation == 1){
+			maxBoostTime = 9f;
+			boostVal = 20f;
             base_acceleration = 5f;
-            someMaxSpeed = 5f;
-            driftFactor = 0.94f;
+            baseSpeed = 6f;
+            driftFactor = 0.5f;
         }
     }
 
